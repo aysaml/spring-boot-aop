@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../Css/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="../Css/bootstrap-responsive.css"/>
+    <link rel="stylesheet" type="text/css" href="../Css/style.css"/>
+    <script type="text/javascript" src="../Js/jquery.js"></script>
+    <script type="text/javascript" src="../Js/bootstrap.js"></script>
+    <script type="text/javascript" src="../Js/ckform.js"></script>
+    <script type="text/javascript" src="../Js/common.js"></script>
+    <script type="text/javascript" src="../../js/jquery-3.2.1.min.js"></script>
+
+
+    <style type="text/css">
+        body {
+            padding-bottom: 40px;
+        }
+
+        .sidebar-nav {
+            padding: 9px 0;
+        }
+
+        @media (max-width: 980px) {
+            /* Enable use of floated navbar text */
+            .navbar-text.pull-right {
+                float: none;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+        }
+
+
+    </style>
+</head>
+<body>
+<!-- 用于显示服务器发来的消息-->
+<div class="alert alert-danger alert-dismissible" style="display:none">
+    <h4 style="margin-bottom: 0px;"><i class="fa fa-exclamation-triangle"
+                                       id="errorMessage"></i></h4>
+</div>
+<br/>
+<form class="definewidth m20">
+    <!--<input type="hidden" name="id" value="{$user.id}"/>-->
+    <table class="table table-bordered table-hover definewidth m10">
+        <tr>
+            <td width="10%" class="tableleft">登录名</td>
+            <td><input type="text" name="username" id="username"/></td>
+        </tr>
+        <tr>
+            <td class=" tableleft">密码
+            </td>
+            <td><input type="password" name="password" id="password"/></td>
+        </tr>
+
+        <tr>
+            <td class="tableleft"></td>
+            <td>
+                <button type="button" class="btn btn-primary" type="button" id="buttonid">保存</button> &nbsp;&nbsp;<button
+                    type="button" class="btn btn-success" name="backid" id="backid">返回
+            </button>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
+<script>
+    $(function () {
+        $('#backid').click(function () {
+            window.location.href = "../../indexPage.html";
+        });
+        $('#buttonid').click(doUpdate);
+    });
+
+    function doUpdate() {
+        var name = $('#username').val();
+        console.log(name);
+        var password = $('#password').val();
+        console.log(password);
+        if (name == '') {
+            $('#errorMessage').parent().parent().css('display', 'block');
+            $('#errorMessage').text('用户名不能为空');
+            return false;
+        }
+        if (password == '') {
+            $('#errorMessage').parent().parent().css('display', 'block');
+            $('#errorMessage').text('密码不能为空');
+            return false;
+        }
+
+        var url = '/updateUser';
+        var params = {'name': name, 'password': password};
+        debugger
+        $.post({
+            url: url, data: params, success: function (result) {
+                if (result.state == 1) {
+                    location.href = '../../indexPage.html';
+                } else {
+                    $('#errorMessage').parent().parent().css('display', 'block');
+                    $('#errorMessage').text(result.message);
+                }
+            }
+        });
+    }
+</script>
